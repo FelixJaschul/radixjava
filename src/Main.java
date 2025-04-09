@@ -38,11 +38,11 @@ class Main {
             randomArr[i] = new Random().nextInt(999);
 
         // Sort the array using radix sort
-        long start = System.nanoTime() / 1_000_000L; // to milliseconds
-        Main.sort(randomArr);
-        long end = System.nanoTime() / 1_000_000L;
+        long start = System.nanoTime();
+        sort(randomArr);
+        long end = System.nanoTime();
 
-        double ms = (end - start); // to milliseconds
+        double ms = (end - start) / 1e6; // to milliseconds
         System.out.println("Array sortiert in: " + ms + " ms");
     }
 }
