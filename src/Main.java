@@ -49,10 +49,8 @@ class Test {
         for (int i = 0; i < repetitions; i++) {
             int[] temp = Arrays.copyOf(data, data.length); // Kopiere den Array
 
-            Radix radixSort = new Radix(temp);
-
             long start = System.nanoTime();
-            radixSort.sort(temp);
+            new Radix(temp).sort(temp);
             long end = System.nanoTime();
 
             total += (end - start) / 1e6; // zu ms
@@ -62,23 +60,19 @@ class Test {
     }
 
     public int[] randomArrGenerator(int size) {
-        Random rand = new Random();
         int[] arr = new int[size];
-        for (int i = 0; i < size; i++) {
-            arr[i] = rand.nextInt(1000); // 0-999
-        }
+        for (int i = 0; i < size; i++)
+            arr[i] = new Random().nextInt(1000); // 0-999
         return arr;
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Test test = new Test();
-
         int size = 100 * 100 * 100;
-        int[] randomArr = test.randomArrGenerator(size);
+        int[] randomArr = new Test().randomArrGenerator(size);
 
-        double ms = test.sortInMs(randomArr, 100);
+        double ms = new Test().sortInMs(randomArr, 100);
 
         System.out.printf("Array sorted in: %.4f ms\n", ms);
     }
