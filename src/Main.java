@@ -44,6 +44,6 @@ class Main {
         long end = System.nanoTime();
 
         double ms = ((end - start) / 1e6) / n; // to milliseconds
-        System.out.println("Array sortiert in: " + ms + " ms");
+        System.out.printf("Array sortiert in: %.4f ms", ms);
     }
 }
