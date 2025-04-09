@@ -28,17 +28,17 @@ class Radix {
         int[] out = new int[size];
         int[] count = {0, 0};
 
-        // Count the occurrences
+        // Schauen wie viele einser es gibt
         for (int i = 0; i < size; ++i)
             count[(data[i] >> log) % 2]++;
 
-        count[1] = count[0]; // Ones start after zeros
-        count[0] = 0;        // Zeros start at index 0
+        count[1] = count[0]; // Einsen fangen nach den Nullen an
+        count[0] = 0;        // Nullen fangen bei 0 an
 
         for (int i = 0; i < size; ++i)
             out[count[(data[i] >> log) % 2]++] = data[i];
 
-        System.arraycopy(out, 0, data, 0, size); // Copy the array back
+        System.arraycopy(out, 0, data, 0, size); // Kopiere den Array zurück
     }
 }
 
@@ -47,7 +47,7 @@ class Test {
         double total = 0.0;
 
         for (int i = 0; i < repetitions; i++) {
-            int[] temp = Arrays.copyOf(data, data.length); // Copy the array
+            int[] temp = Arrays.copyOf(data, data.length); // Kopiere den Array
 
             Radix radixSort = new Radix(temp);
 
@@ -55,7 +55,7 @@ class Test {
             radixSort.sort(temp);
             long end = System.nanoTime();
 
-            total += (end - start) / 1e6; // Convert to milliseconds
+            total += (end - start) / 1e6; // zu ms
         }
 
         return total / repetitions;
