@@ -3,11 +3,11 @@ import java.util.Random;
 
 class Main {
 
-    public static void sort(int[] array) {
+    public static void sort(int[] array, int n) {
         int maxElement = Arrays.stream(array).max().getAsInt();
-
-        for (int exp = 1; maxElement / exp > 0; exp *= 10)
-            countingSort(array, exp);
+        for (int i = 0; i < n; i++)
+            for (int exp = 1; maxElement / exp > 0; exp *= 10)
+                countingSort(array, exp);
     }
 
     private static void countingSort(int[] array, int exp) {
@@ -30,6 +30,7 @@ class Main {
     }
 
     public static void main(String[] args) {
+        int n = 1000;
         int size = 100 * 100 * 100;
         int[] randomArr = new int[size];
 
@@ -39,10 +40,10 @@ class Main {
 
         // Sort the array using radix sort
         long start = System.nanoTime();
-        sort(randomArr);
+        sort(randomArr, n);
         long end = System.nanoTime();
 
-        double ms = (end - start) / 1e6; // to milliseconds
+        double ms = ((end - start) / 1e6) / n; // to milliseconds
         System.out.println("Array sortiert in: " + ms + " ms");
     }
 }
