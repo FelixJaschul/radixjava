@@ -1,79 +1,48 @@
 import java.util.Arrays;
 import java.util.Random;
 
-class Radix {
-    private int[] data;
-    private int size;
+class Main {
 
-    public Radix(int[] arr) {
-        this.data = arr;
-        this.size = arr.length;
+    public static void sort(int[] array) {
+        int maxElement = Arrays.stream(array).max().getAsInt();
+
+        for (int exp = 1; maxElement / exp > 0; exp *= 10)
+            countingSort(array, exp);
     }
 
-    public void sort(int[] arr) {
-        data = arr;
-        size = arr.length;
-        int m = data[0];
-        for (int i = 1; i < size; ++i)
-            if (data[i] > m)
-                m = data[i];
+    private static void countingSort(int[] array, int exp) {
+        int n = array.length;
+        int[] output = new int[n];
+        int[] count = new int[10];
 
-        int l = (int)(Math.log(m) / Math.log(2)) + 1;
+        for (int i = 0; i < n; ++i)
+            count[(array[i] / exp) % 10]++;
 
-        for (int i = 0; i < l; ++i)
-            countingSort(i);
-    }
+        for (int i = 1; i < 10; ++i)
+            count[i] += count[i - 1];
 
-    private void countingSort(int log) {
-        int[] out = new int[size];
-        int[] count = {0, 0};
-
-        // Schauen wie viele einser es gibt
-        for (int i = 0; i < size; ++i)
-            count[(data[i] >> log) % 2]++;
-
-        count[1] = count[0]; // Einsen fangen nach den Nullen an
-        count[0] = 0;        // Nullen fangen bei 0 an
-
-        for (int i = 0; i < size; ++i)
-            out[count[(data[i] >> log) % 2]++] = data[i];
-
-        System.arraycopy(out, 0, data, 0, size); // Kopiere den Array zurück
-    }
-}
-
-class Test {
-    public double sortInMs(int[] data, int repetitions) {
-        double total = 0.0;
-
-        for (int i = 0; i < repetitions; i++) {
-            int[] temp = Arrays.copyOf(data, data.length); // Kopiere den Array
-
-            long start = System.nanoTime();
-            new Radix(temp).sort(temp);
-            long end = System.nanoTime();
-
-            total += (end - start) / 1e6; // zu ms
+        for (int i = n - 1; i >= 0; --i) {
+            output[count[(array[i] / exp) % 10] - 1] = array[i];
+            --count[(array[i] / exp) % 10];
         }
 
-        return total / repetitions;
+        System.arraycopy(output, 0, array, 0, n);
     }
 
-    public int[] randomArrGenerator(int size) {
-        int[] arr = new int[size];
-        for (int i = 0; i < size; i++)
-            arr[i] = new Random().nextInt(1000); // 0-999
-        return arr;
-    }
-}
-
-public class Main {
     public static void main(String[] args) {
         int size = 100 * 100 * 100;
-        int[] randomArr = new Test().randomArrGenerator(size);
+        int[] randomArr = new int[size];
 
-        double ms = new Test().sortInMs(randomArr, 100);
+        // Generate a random array
+        for (int i = 0; i < size; ++i)
+            randomArr[i] = new Random().nextInt(999);
 
-        System.out.printf("Array sorted in: %.4f ms\n", ms);
+        // Sort the array using radix sort
+        long start = System.nanoTime() / 1_000_000L; // to milliseconds
+        Main.sort(randomArr);
+        long end = System.nanoTime() / 1_000_000L;
+
+        double ms = (end - start); // to milliseconds
+        System.out.println("Array sortiert in: " + ms + " ms");
     }
 }
