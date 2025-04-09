@@ -80,7 +80,7 @@ class Test {
         Random rand = new Random();
         int[] arr = new int[size];
         for (int i = 0; i < size; i++) {
-            arr[i] = rand.nextInt(1000); // Generate random numbers between 0 and 999
+            arr[i] = rand.nextInt(1000); // 0-999
         }
         return arr;
     }
