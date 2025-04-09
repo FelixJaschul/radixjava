@@ -1,30 +1,27 @@
 import java.util.Arrays;
 import java.util.Random;
 
-interface SortAlgorithm {
-    void sort(int[] arr);
-    String getName();
-}
-
-class RadixSort implements SortAlgorithm {
+class Radix {
     private int[] data;
     private int size;
 
-    public RadixSort(int[] arr) {
+    public Radix(int[] arr) {
         this.data = arr;
         this.size = arr.length;
     }
 
-    @Override
     public void sort(int[] arr) {
         data = arr;
         size = arr.length;
-        sort_();
-    }
+        int m = data[0];
+        for (int i = 1; i < size; ++i)
+            if (data[i] > m)
+                m = data[i];
 
-    @Override
-    public String getName() {
-        return "Radix Sort";
+        int l = (int)(Math.log(m) / Math.log(2)) + 1;
+
+        for (int i = 0; i < l; ++i)
+            countingSort(i);
     }
 
     private void countingSort(int log) {
@@ -43,18 +40,6 @@ class RadixSort implements SortAlgorithm {
 
         System.arraycopy(out, 0, data, 0, size); // Copy the array back
     }
-
-    private void sort_() {
-        int m = data[0];
-        for (int i = 1; i < size; ++i)
-            if (data[i] > m)
-                m = data[i];
-
-        int l = (int)(Math.log(m) / Math.log(2)) + 1;
-
-        for (int i = 0; i < l; ++i)
-            countingSort(i);
-    }
 }
 
 class Test {
@@ -64,7 +49,7 @@ class Test {
         for (int i = 0; i < repetitions; i++) {
             int[] temp = Arrays.copyOf(data, data.length); // Copy the array
 
-            RadixSort radixSort = new RadixSort(temp);
+            Radix radixSort = new Radix(temp);
 
             long start = System.nanoTime();
             radixSort.sort(temp);
@@ -90,7 +75,7 @@ public class Main {
     public static void main(String[] args) {
         Test test = new Test();
 
-        int size = 100;
+        int size = 100 * 100 * 100;
         int[] randomArr = test.randomArrGenerator(size);
 
         double ms = test.sortInMs(randomArr, 100);
