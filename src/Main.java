@@ -1,23 +1,24 @@
 import java.util.Arrays;
+import java.util.Random;
 
-abstract class SortAlgorithm {
-    public abstract void sort(int[] arr);
-    public abstract String getName();
+interface SortAlgorithm {
+    void sort(int[] arr);
+    String getName();
 }
 
-class RadixSort extends SortAlgorithm {
+class RadixSort implements SortAlgorithm {
     private int[] data;
     private int size;
 
-    public RadixSort(int[] data) {
-        this.data = data;
-        this.size = (data != null) ? data.length : 0;
+    public RadixSort(int[] arr) {
+        this.data = arr;
+        this.size = arr.length;
     }
 
     @Override
     public void sort(int[] arr) {
-        this.data = arr;
-        this.size = arr.length;
+        data = arr;
+        size = arr.length;
         sort_();
     }
 
@@ -28,23 +29,27 @@ class RadixSort extends SortAlgorithm {
 
     private void countingSort(int log) {
         int[] out = new int[size];
-        int[] count = new int[2];
+        int[] count = {0, 0};
 
-        // Schauen wie viele einer es gibt
+        // Count the occurrences
         for (int i = 0; i < size; ++i)
             count[(data[i] >> log) % 2]++;
 
-        count[1] = count[0]; // Einsen fangen nach den Nullen an
-        count[0] = 0;        // Nullen fangen bei 0 an
+        count[1] = count[0]; // Ones start after zeros
+        count[0] = 0;        // Zeros start at index 0
 
         for (int i = 0; i < size; ++i)
             out[count[(data[i] >> log) % 2]++] = data[i];
 
-        System.arraycopy(out, 0, data, 0, size);
+        System.arraycopy(out, 0, data, 0, size); // Copy the array back
     }
 
     private void sort_() {
-        int m = Arrays.stream(data).max().orElse(0);
+        int m = data[0];
+        for (int i = 1; i < size; ++i)
+            if (data[i] > m)
+                m = data[i];
+
         int l = (int)(Math.log(m) / Math.log(2)) + 1;
 
         for (int i = 0; i < l; ++i)
@@ -52,33 +57,44 @@ class RadixSort extends SortAlgorithm {
     }
 }
 
-public class Main {
-    public static void main(String[] args) {
-        int[] arr = {5, 3, 9, 1, 6};
+class Test {
+    public double sortInMs(int[] data, int repetitions) {
+        double total = 0.0;
 
-        double ms = sortInMs(arr, 1000);
+        for (int i = 0; i < repetitions; i++) {
+            int[] temp = Arrays.copyOf(data, data.length); // Copy the array
 
-        System.out.print("Array: ");
-        for (int num : arr)
-            System.out.print(num + " ");
-        System.out.printf("sortiert in: " + "%.4f" + " ms%n", ms);
-    }
+            RadixSort radixSort = new RadixSort(temp);
 
-    private static double sortInMs(int[] data, int n) {
-        double total = 0;
-        RadixSort radixSort = new RadixSort(data);
-
-        for (int i = 0; i < n; ++i) {
-            int[] temp = new int[data.length];
-            System.arraycopy(data, 0, temp, 0, data.length);
-
-            // Zeitmessung
             long start = System.nanoTime();
-            radixSort.sort(data);
+            radixSort.sort(temp);
             long end = System.nanoTime();
-            total += (end - start) / 1e6;
+
+            total += (end - start) / 1e6; // Convert to milliseconds
         }
 
-        return total / n;
+        return total / repetitions;
+    }
+
+    public int[] randomArrGenerator(int size) {
+        Random rand = new Random();
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = rand.nextInt(1000); // Generate random numbers between 0 and 999
+        }
+        return arr;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Test test = new Test();
+
+        int size = 100;
+        int[] randomArr = test.randomArrGenerator(size);
+
+        double ms = test.sortInMs(randomArr, 100);
+
+        System.out.printf("Array sorted in: %.4f ms\n", ms);
     }
 }
