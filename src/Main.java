@@ -30,8 +30,8 @@ class Main {
     }
 
     public static void main(String[] args) {
-        int n = (int)1e3;
-        int size = (int)1e8;
+        int n = 1000;
+        int size = 100_000_000;
         int[] randomArr = new int[size];
 
         // Generate a random array
