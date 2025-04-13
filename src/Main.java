@@ -3,13 +3,6 @@ import java.util.Random;
 
 class Main {
 
-    public static void sort(int[] array, int n) {
-        int maxElement = Arrays.stream(array).max().getAsInt();
-        for (int i = 0; i < n; i++)
-            for (int exp = 1; maxElement / exp > 0; exp *= 10)
-                countingSort(array, exp);
-    }
-
     private static void countingSort(int[] array, int exp) {
         int n = array.length;
         int[] output = new int[n];
@@ -27,6 +20,13 @@ class Main {
         }
 
         System.arraycopy(output, 0, array, 0, n);
+    }
+
+    public static void sort(int[] array, int n) {
+        int maxElement = Arrays.stream(array).max().getAsInt();
+        for (int i = 0; i < n; i++)
+            for (int exp = 1; maxElement / exp > 0; exp *= 10)
+                countingSort(array, exp);
     }
 
     public static void main(String[] args) {
