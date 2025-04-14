@@ -5,7 +5,7 @@ class Main {
 
     private static void countingSort(int[] data, int exp) {
         int n = data.length;
-        int[] output = new int[n];
+        int[] out = new int[n];
         int[] count = new int[10];
 
         for (int i = 0; i < n; ++i)
@@ -15,11 +15,11 @@ class Main {
             count[i] += count[i - 1];
 
         for (int i = n - 1; i >= 0; --i) {
-            output[count[(data[i] / exp) % 10] - 1] = data[i];
+            out[count[(data[i] / exp) % 10] - 1] = data[i];
             --count[(data[i] / exp) % 10];
         }
 
-        System.arraycopy(output, 0, data, 0, n);
+        System.arraycopy(out, 0, data, 0, n);
     }
 
     public static void sort(int[] data, int n) {
@@ -34,11 +34,8 @@ class Main {
         int size = (int)1e6;
         int[] data = new int[size];
 
-        // Generate a random array
-        for (int i = 0; i < size; ++i)
-            data[i] = new Random().nextInt(999);
+        for (int i = 0; i < size; ++i) data[i] = new Random().nextInt(999);
 
-        // Sort the array using radix sort
         long start = System.nanoTime();
         sort(data, n);
         long end = System.nanoTime();
