@@ -22,11 +22,10 @@ class Main {
         System.arraycopy(out, 0, data, 0, n);
     }
 
-    public static void sort(int[] data, int n) {
+    public static void sort(int[] data) {
         int m = Arrays.stream(data).max().getAsInt();
-        for (int i = 0; i < n; i++)
-            for (int exp = 1; m / exp > 0; exp *= 10)
-                countingSort(data, exp);
+        for (int exp = 1; m / exp > 0; exp *= 10)
+            countingSort(data, exp);
     }
 
     public static void main(String[] args) {
@@ -37,7 +36,8 @@ class Main {
         for (int i = 0; i < size; ++i) data[i] = new Random().nextInt(999);
 
         long start = System.nanoTime();
-        sort(data, n);
+        for (int i = 0; i < n; i++)
+            sort(data);
         long end = System.nanoTime();
 
         double ms = ((end - start) / 1e6) / n; // to milliseconds
