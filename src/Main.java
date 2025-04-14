@@ -23,15 +23,15 @@ class Main {
     }
 
     public static void sort(int[] data, int n) {
-        int maxElement = Arrays.stream(data).max().getAsInt();
+        int m = Arrays.stream(data).max().getAsInt();
         for (int i = 0; i < n; i++)
-            for (int exp = 1; maxElement / exp > 0; exp *= 10)
+            for (int exp = 1; m / exp > 0; exp *= 10)
                 countingSort(data, exp);
     }
 
     public static void main(String[] args) {
-        int n = (int)1e2;
-        int size = (int)1e6;
+        int n = (int) 1e2;
+        int size = (int) 1e6;
         int[] data = new int[size];
 
         for (int i = 0; i < size; ++i) data[i] = new Random().nextInt(999);
